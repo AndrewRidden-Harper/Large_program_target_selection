@@ -32,12 +32,21 @@ import itertools
 
 
 ### I think more accurate time constraints, considering that the dates on the schedule are start of the night (starting at 16:00 and going to 07:00 on the date after)
-t1 = Time('2022-09-29T16:00:00', format='isot', scale='utc')
-t2 = Time('2022-10-10T07:00:00', format='isot', scale='utc')
+# t1 = Time('2022-09-29T16:00:00', format='isot', scale='utc')
+# t2 = Time('2022-10-10T07:00:00', format='isot', scale='utc')
 
-t3 = Time('2023-01-20T16:00:00', format='isot', scale='utc')
-t4 = Time('2023-02-01T07:00:00', format='isot', scale='utc')
+# t3 = Time('2023-01-20T16:00:00', format='isot', scale='utc')
+# t4 = Time('2023-02-01T07:00:00', format='isot', scale='utc')
 
+
+#### For finding the additional transits in the adjusted GRACES windows 
+t1 = Time('2022-09-22T16:00:00', format='isot', scale='utc')
+t2 = Time('2022-09-28T07:00:00', format='isot', scale='utc')
+
+# t3 = Time('2023-01-20T16:00:00', format='isot', scale='utc')
+# t4 = Time('2023-02-01T07:00:00', format='isot', scale='utc')
+
+InPeriod2 = True
 
 
 OutputStr = ''
@@ -133,7 +142,7 @@ for i in range(len(lines)):
         
         
         InPeriod1 = ((t.mjd >= t1.mjd) & (t.mjd<=t2.mjd))
-        InPeriod2 = ((t.mjd >= t3.mjd) & (t.mjd<=t4.mjd))
+        #InPeriod2 = ((t.mjd >= t3.mjd) & (t.mjd<=t4.mjd))
         
         # if LastPlanetName == 'HAT-P-20 b\n':
         #     raise Exception        
@@ -166,16 +175,25 @@ for key in PlanetPerDayDict.keys():
     #PlanetListString = PlanetListString[0:-2]        
     PlanetPerDayDict_FormattedForCopyingText[key] = PlanetListString
     
+PlanetPerDayWriteFile = open('LLP_2022B_planets_per_day.txt','w')
 
 for key in sorted(list(PlanetPerDayDict_FormattedForCopyingText.keys())):
     print()
     print(key+':')
     print(PlanetPerDayDict_FormattedForCopyingText[key])
     
+    PlanetPerDayWriteFile.write('\n') 
+    PlanetPerDayWriteFile.write(key+':'+'\n')
+    PlanetPerDayWriteFile.write(PlanetPerDayDict_FormattedForCopyingText[key]+':'+'\n')
+  
+PlanetPerDayWriteFile.close()
+    
 
         
-WriteFile = open('LLP_2022B_transits_in_GRACES_periods_BetterLastAndFirstDayV3.txt','w')
+#WriteFile = open('LLP_2022B_transits_in_GRACES_periods_BetterLastAndFirstDayV3.txt','w')
 #WriteFile = open('test_write.txt','w')
+WriteFile = open('LLP_2022B_transits_Sept22-28.txt','w')
+
 
 WriteFile.write(OutputStr)
 WriteFile.close()
@@ -184,7 +202,7 @@ PlanetNameListStr = ''
 for i in WrittenPlanetNameList:
     PlanetNameListStr += i
 
-with open('PlanetNameList.txt','w') as PlanetNameListFile:
+with open('PlanetNameList_Sept22-28.txt','w') as PlanetNameListFile:
     PlanetNameListFile.write(PlanetNameListStr)
 
 ### Check that all planet names in WrittenPlanetNameList are also in PlanetPerDayDict_FormattedForCopyingText
